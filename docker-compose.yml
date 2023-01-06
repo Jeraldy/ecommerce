@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  mongodb-dev:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: [ "bash", "-c", "npm start" ]
+    environment:
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb-dev
+    restart: always
+    volumes:
+      - ./frontend:/frontend
+
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: [ "bash", "-c", "yarn start" ]
+    environment:
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend-dev
+    restart: always
+    volumes:
+      - ./frontend:/frontend
+
