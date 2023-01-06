@@ -15,11 +15,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    command: [ "bash", "-c", "npm start" ]
+    command: [ "bash", "-c", "yarn start" ]
     environment:
-      - PORT=3001
+      - PORT=8080
+      - DATABASE=mongodb://localhost:27017/mytestdb
     ports:
-      - "3001:3001"
+      - "8080:8080"
     depends_on:
       - mongodb-dev
     restart: always
