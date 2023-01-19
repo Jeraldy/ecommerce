@@ -1,244 +1,42 @@
-version: 2.1
+version: "3.9"
 
-jobs:
-  backend-unittest:
-    docker:
-      - image: circleci/node:12-browsers
-      - image: circleci/mongo:6.0
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Waiting for Mongo
-          command: dockerize -wait tcp://localhost:27017 -timeout 1m
-      - checkout
-      - run:
-          name: Get versions
-          command: |
-              node -v
-              npm -v
-              mongo -v
-              mongo localhost --eval "db.version()"
+services:
+  mongodb-dev:
+    image: mongo:6.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
 
-  # frontend-unittest:
-  #   docker:
-  #     - image: cimg/node:16.14
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         name: Restore Yarn Package Cache
-  #         keys:
-  #           - yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #     - run:
-  #         name: Install Dependencies
-  #         command: |
-  #           cd frontend
-  #           yarn install --immutable
-  #     - save_cache:
-  #         name: Save Yarn Package Cache
-  #         key: yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #         paths:
-  #           - .yarn/cache
-  #           - .yarn/unplugged
-  #     - run:
-  #         name: Eslint
-  #         command: |
-  #           cd frontend
-  #           yarn run eslint "src/**/*.{js,jsx}" --max-warnings 0
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: [ "bash", "-c", "yarn start" ]
+    environment:
+      - PORT=8080
+      - DATABASE=mongodb://mongodb-dev:27017/ecommerce
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb-dev
+    restart: always
+    volumes:
+      - ./backend:/backend
+    links:
+      - mongodb-dev
 
-  # backend-e2e-test:
-  #   docker:
-  #     - image: cimg/python:3.10-node
-  #       environment:
-  #         POSTGRES_NAME: postgres-circleci
-  #         POSTGRES_USER: root
-  #         POSTGRES_HOST: localhost
-  #         POSTGRES_PORT: 5432
-  #         RABBITMQ_DEFAULT_USER: user
-  #         RABBITMQ_DEFAULT_PASS: mypassword
-  #         RABBITMQ_DEFAULT_VHOST: localhost
-  #         RABBITMQ_DEFAULT_PORT: 5672
-  #         RABBITMQ_AMQP_PROTOCOL: amqp
-  #         DJANGO_SETTINGS_MODULE: app.settings.test
-  #     - image: cimg/postgres:14.1
-  #       environment:
-  #         POSTGRES_USER: root
-  #         POSTGRES_DB: postgres-circleci
-  #     - image: rabbitmq:3.8
-  #       environment:
-  #         RABBITMQ_DEFAULT_USER: user
-  #         RABBITMQ_DEFAULT_PASS: mypassword
-  #   parallelism: 4
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - poetry-{{ checksum "backend/poetry.lock" }}
-  #           - yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #     - run:
-  #         name: Install Dependencies
-  #         command: cd backend && poetry install
-  #     - save_cache:
-  #         key: poetry-{{ checksum "backend/poetry.lock" }}
-  #         paths:
-  #           - /home/circleci/.cache/pypoetry/virtualenvs
-  #     - restore_cache:
-  #         name: Restore Yarn Package Cache
-  #         keys:
-  #           - yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #     - run:
-  #         name: Install Dependencies
-  #         command: |
-  #           cd frontend
-  #           yarn install --immutable
-  #     - save_cache:
-  #         name: Save Yarn Package Cache
-  #         key: yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #         paths:
-  #           - .yarn/cache
-  #           - .yarn/unplugged
-  #     - run:
-  #         name: Wait for Postgres
-  #         command: |
-  #           for i in `seq 1 10`;
-  #           do
-  #             nc -z localhost 5432 && echo Success && exit 0
-  #             echo -n .
-  #             sleep 1
-  #           done
-  #           echo Failed waiting for Postgres && exit 1
-  #     - run:
-  #         name: Run Migrations
-  #         command: cd backend && poetry run python manage.py migrate
-  #     - run:
-  #         name: Start Celery
-  #         command: cd backend && poetry run celery -A app worker -l INFO
-  #         background: true
-  #     - run:
-  #         name: Start Backend Server
-  #         command: cd backend && poetry run python manage.py runserver 0.0.0.0:8001
-  #         background: true
-  #     - run:
-  #         name: Start Frontend
-  #         command: cd frontend && DISABLE_ESLINT_PLUGIN=true yarn start
-  #         background: true
-  #     - run:
-  #         name: Install Cypress Dependencies
-  #         command: sudo apt-get update && sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-  #     - run:
-  #         name: Wait for frontend
-  #         command: cd frontend && yarn wait-on http-get://localhost:3000
-  #     - run:
-  #         name: Run E2E tests
-  #         command: |
-  #           cd frontend
-  #           TEST_FILES="$(circleci tests glob "cypress/integration/**/*.js" | circleci tests split --split-by=timings)"
-  #           yarn cypress run --spec ${TEST_FILES//$'\n'/','}
-  #     - store_artifacts:
-  #         path: frontend/cypress/videos/
-  #         destination: videos
-  #     - store_test_results:
-  #         path: frontend/cypress/results
-
-  # frontend-e2e-test:
-  #   docker:
-  #     - image: cimg/python:3.10-node
-  #       environment:
-  #         POSTGRES_NAME: postgres-circleci
-  #         POSTGRES_USER: root
-  #         POSTGRES_HOST: localhost
-  #         POSTGRES_PORT: 5432
-  #         RABBITMQ_DEFAULT_USER: user
-  #         RABBITMQ_DEFAULT_PASS: mypassword
-  #         RABBITMQ_DEFAULT_VHOST: localhost
-  #         RABBITMQ_DEFAULT_PORT: 5672
-  #         RABBITMQ_AMQP_PROTOCOL: amqp
-  #         DJANGO_SETTINGS_MODULE: app.settings.test
-  #     - image: cimg/postgres:14.1
-  #       environment:
-  #         POSTGRES_USER: root
-  #         POSTGRES_DB: postgres-circleci
-  #     - image: rabbitmq:3.8
-  #       environment:
-  #         RABBITMQ_DEFAULT_USER: user
-  #         RABBITMQ_DEFAULT_PASS: mypassword
-  #   parallelism: 4
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - poetry-{{ checksum "backend/poetry.lock" }}
-  #           - yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #     - run:
-  #         name: Install Dependencies
-  #         command: cd backend && poetry install
-  #     - save_cache:
-  #         key: poetry-{{ checksum "backend/poetry.lock" }}
-  #         paths:
-  #           - /home/circleci/.cache/pypoetry/virtualenvs
-  #     - restore_cache:
-  #         name: Restore Yarn Package Cache
-  #         keys:
-  #           - yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #     - run:
-  #         name: Install Dependencies
-  #         command: |
-  #           cd frontend
-  #           yarn install --immutable
-  #     - save_cache:
-  #         name: Save Yarn Package Cache
-  #         key: yarn-packages-{{ checksum "frontend/yarn.lock" }}
-  #         paths:
-  #           - .yarn/cache
-  #           - .yarn/unplugged
-  #     - run:
-  #         name: Wait for Postgres
-  #         command: |
-  #           for i in `seq 1 10`;
-  #           do
-  #             nc -z localhost 5432 && echo Success && exit 0
-  #             echo -n .
-  #             sleep 1
-  #           done
-  #           echo Failed waiting for Postgres && exit 1
-  #     - run:
-  #         name: Run Migrations
-  #         command: cd backend && poetry run python manage.py migrate
-  #     - run:
-  #         name: Start Celery
-  #         command: cd backend && poetry run celery -A app worker -l INFO
-  #         background: true
-  #     - run:
-  #         name: Start Backend Server
-  #         command: cd backend && poetry run python manage.py runserver 0.0.0.0:8001
-  #         background: true
-  #     - run:
-  #         name: Start Frontend
-  #         command: cd frontend && DISABLE_ESLINT_PLUGIN=true yarn start
-  #         background: true
-  #     - run:
-  #         name: Install Cypress Dependencies
-  #         command: sudo apt-get update && sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-  #     - run:
-  #         name: Wait for frontend
-  #         command: cd frontend && yarn wait-on http-get://localhost:3000
-  #     - run:
-  #         name: Run E2E tests
-  #         command: |
-  #           cd frontend
-  #           TEST_FILES="$(circleci tests glob "cypress/integration/**/*.js" | circleci tests split --split-by=timings)"
-  #           yarn cypress run --spec ${TEST_FILES//$'\n'/','}
-  #     - store_artifacts:
-  #         path: frontend/cypress/videos/
-  #         destination: videos
-  #     - store_test_results:
-  #         path: frontend/cypress/results
-
-workflows:
-  version: 2
-  test-and-deploy:
-    jobs:
-      - backend-unittest
-      # - backend-e2e-test
-      # - frontend-unittest
-      # - frontend-e2e-test1
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: [ "bash", "-c", "yarn start" ]
+    environment:
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend-dev
+    restart: always
+    volumes:
+      - ./frontend:/frontend
