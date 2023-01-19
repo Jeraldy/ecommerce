@@ -12,3 +12,6 @@ yarn-error.log*
 
 # eslint
 .eslintcache
+
+# mongodb-data
+data
