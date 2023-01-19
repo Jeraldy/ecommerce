@@ -11,13 +11,26 @@ jobs:
       - run:
           name: Waiting for Mongo
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
-      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "backend/yarn.lock" }}
       - run:
-          name: Get versions
+          name: Install Dependencies
           command: |
-              node -v
-              npm -v
-              mongo -v
+            cd backend
+            yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "backend/yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
+      # - run:
+      #     name: Eslint
+      #     command: |
+      #       cd backend
+      #       yarn run eslint "src/**/*.{js,jsx}" --max-warnings 0
 
   # frontend-unittest:
   #   docker:
