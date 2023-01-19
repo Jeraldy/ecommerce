@@ -3,13 +3,10 @@ version: "3.9"
 services:
   mongodb-dev:
     image: mongo:latest
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/data/db
+      - ./data:/data/db
 
   backend-dev:
     build:
@@ -18,14 +15,16 @@ services:
     command: [ "bash", "-c", "yarn start" ]
     environment:
       - PORT=8080
-      - DATABASE=mongodb://localhost:27017/mytestdb
+      - DATABASE=mongodb://mongodb-dev:27017/ecommerce
     ports:
       - "8080:8080"
     depends_on:
       - mongodb-dev
     restart: always
     volumes:
-      - ./frontend:/frontend
+      - ./backend:/backend
+    links:
+      - mongodb-dev
 
   frontend-dev:
     build:
@@ -41,4 +40,3 @@ services:
     restart: always
     volumes:
       - ./frontend:/frontend
-
