@@ -4,7 +4,7 @@ jobs:
   backend-unittest:
     docker:
       - image: circleci/node:12-browsers
-      - image: circleci/mongo:6.0
+      - image: mongo:4.1.6-xenial
     steps:
       - checkout
       - setup_remote_docker
