@@ -1,42 +1,34 @@
-version: "3.9"
+version: 2.1
 
-services:
-  mongodb-dev:
-    image: mongo:6.0
-    ports:
-      - 27017:27017
-    volumes:
-      - ./data:/data/db
+jobs:
+  backend-unittest:
+    docker:
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+      - image: mongo:4.1.6-xenial
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Waiting for Mongo
+          command: dockerize -wait tcp://localhost:27017 -timeout 1m
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "backend/yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            cd backend
+            yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "backend/yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
 
-  backend-dev:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    command: [ "bash", "-c", "yarn start" ]
-    environment:
-      - PORT=8080
-      - DATABASE=mongodb://mongodb-dev:27017/ecommerce
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongodb-dev
-    restart: always
-    volumes:
-      - ./backend:/backend
-    links:
-      - mongodb-dev
-
-  frontend-dev:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    command: [ "bash", "-c", "yarn start" ]
-    environment:
-      - PORT=3001
-    ports:
-      - "3001:3001"
-    depends_on:
-      - backend-dev
-    restart: always
-    volumes:
-      - ./frontend:/frontend
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - backend-unittest
