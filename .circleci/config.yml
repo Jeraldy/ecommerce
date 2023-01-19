@@ -18,7 +18,6 @@ jobs:
               node -v
               npm -v
               mongo -v
-              mongo localhost --eval "db.version()"
 
   # frontend-unittest:
   #   docker:
