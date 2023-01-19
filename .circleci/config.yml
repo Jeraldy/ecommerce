@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   backend-unittest:
     docker:
-      - image: circleci/node:12-browsers
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
       - image: mongo:4.1.6-xenial
     steps:
       - checkout
@@ -29,6 +29,6 @@ jobs:
 
 workflows:
   version: 2
-  run_build:
+  test-and-deploy:
     jobs:
       - backend-unittest
