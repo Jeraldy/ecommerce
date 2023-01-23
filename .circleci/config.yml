@@ -31,11 +31,11 @@ jobs:
             - .yarn/unplugged
 
   build-and-deploy-frontend:
-  parameters:
-    uppercase_environment:
-      type: string
-    frontend_bucket:
-      type: string
+    parameters:
+      uppercase_environment:
+        type: string
+      frontend_bucket:
+        type: string
     docker:
       - image: circleci/node:16.13.1-bullseye-browsers-legacy
     steps:
