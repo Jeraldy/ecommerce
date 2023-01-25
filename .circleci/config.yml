@@ -111,7 +111,7 @@ workflows:
           uppercase_environment: 'DEV'
           frontend_bucket: 'jeddy-ecommerce-frontend'
           requires:
-            - build-backend
+            - build-backend-dev
           filters:
             branches:
               only:
