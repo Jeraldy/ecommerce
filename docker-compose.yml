@@ -11,7 +11,7 @@ services:
   backend-dev:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: [ "bash", "-c", "yarn start" ]
     environment:
       - PORT=8080
