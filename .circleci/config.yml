@@ -3,9 +3,11 @@ version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@3.0.0
   aws-ecr: circleci/aws-ecr@7.3.0
+  aws-cli: circleci/aws-cli@2.1.0
+  aws-ecs: circleci/aws-ecs@2.2.1
 
 jobs:
-  backend-unittest:
+  backend-unit-test:
     docker:
       - image: circleci/node:16.13.1-bullseye-browsers-legacy
       - image: mongo:4.1.6-xenial
@@ -90,18 +92,47 @@ jobs:
           tag: 'circleci-$CIRCLE_SHA1,<< parameters.lowercase_environment >>,latest'
           path: backend/
           repo: 'ecommerce-<< parameters.lowercase_environment >>-repo'
+  
+  deploy-backend:
+    parameters:
+      lowercase_environment:
+        type: string
+      uppercase_environment:
+        type: string
+    docker:
+      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
+          aws-region: AWS_REGION_<< parameters.uppercase_environment >>
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
+      - aws-ecs/update-service:
+          cluster-name: ecommerce-001-<< parameters.lowercase_environment >>-cluster
+          service-name: webserver-001-<< parameters.lowercase_environment >>-service
+          family: webserver-001-<< parameters.lowercase_environment >>-task-definition
+          force-new-deployment: true
 
 workflows:
   version: 2
   test-and-deploy:
     jobs:
-      - backend-unittest
+      - backend-unit-test
       - build-backend:
           name: 'build-backend-dev'
           lowercase_environment: 'dev'
           uppercase_environment: 'DEV'
           requires:
-            - backend-unittest
+            - backend-unit-test
+          filters:
+            branches:
+              only:
+                - develop
+      - deploy-backend:
+          name: 'deploy-backend-dev'
+          lowercase_environment: 'dev'
+          uppercase_environment: 'DEV'
+          requires:
+            - build-backend-dev
           filters:
             branches:
               only:
