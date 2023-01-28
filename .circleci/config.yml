@@ -92,7 +92,6 @@ jobs:
           tag: 'circleci-$CIRCLE_SHA1,<< parameters.lowercase_environment >>,latest'
           path: backend/
           repo: 'ecommerce-<< parameters.lowercase_environment >>-repo'
-          platform: linux/amd64
   
   deploy-backend:
     parameters:
