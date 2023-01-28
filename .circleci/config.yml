@@ -100,7 +100,7 @@ jobs:
       uppercase_environment:
         type: string
     docker:
-      - image: circleci/node:16.13.1-bullseye-browsers-legacy
+      - image: cimg/python:3.10
     steps:
       - aws-cli/setup:
           aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
