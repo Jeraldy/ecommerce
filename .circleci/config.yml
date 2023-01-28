@@ -107,7 +107,7 @@ jobs:
           aws-region: AWS_REGION_<< parameters.uppercase_environment >>
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
       - aws-ecs/update-service:
-          cluster-name: ecommerce-001-<< parameters.lowercase_environment >>-cluster
+          cluster-name: webserver-001-<< parameters.lowercase_environment >>-cluster
           service-name: webserver-001-<< parameters.lowercase_environment >>-service
           family: webserver-001-<< parameters.lowercase_environment >>-task-definition
           force-new-deployment: true
