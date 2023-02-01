@@ -4,7 +4,8 @@ orbs:
   aws-s3: circleci/aws-s3@3.0.0
   aws-ecr: circleci/aws-ecr@7.3.0
   aws-cli: circleci/aws-cli@2.1.0
-  aws-ecs: circleci/aws-ecs@2.2.1
+  aws-ecs: circleci/aws-ecs@0.0.10
+  # aws-ecs: circleci/aws-ecs@2.2.1
 
 jobs:
   backend-unit-test:
@@ -110,7 +111,6 @@ jobs:
           family: webserver-001-<< parameters.lowercase_environment >>-service
           cluster: webserver-001-<< parameters.lowercase_environment >>-cluster
           container-image-name-updates: 'container=webserver-001-<< parameters.lowercase_environment >>-service,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:${CIRCLE_SHA1}'
-          force-new-deployment: true
       # - aws-ecs/update-service:
       #     cluster-name: webserver-001-<< parameters.lowercase_environment >>-cluster
       #     service-name: webserver-001-<< parameters.lowercase_environment >>-service
