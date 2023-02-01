@@ -113,8 +113,8 @@ jobs:
       #     verify-revision-is-deployed: true
       - aws-ecs/update-service:
           cluster: webserver-001-<< parameters.lowercase_environment >>-cluster
-          family: webserver-001-<< parameters.lowercase_environment >>-service
-          # family: webserver-001-<< parameters.lowercase_environment >>-task-definition
+          service: webserver-001-<< parameters.lowercase_environment >>-service
+          family: webserver-001-<< parameters.lowercase_environment >>-task-definition
           container-image-name-updates: 'container=webserver-001-<< parameters.lowercase_environment >>-service,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:${CIRCLE_SHA1}'
           force-new-deployment: true
 
