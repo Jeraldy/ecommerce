@@ -106,11 +106,16 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.uppercase_environment >>
           aws-region: AWS_REGION_<< parameters.uppercase_environment >>
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
-      - aws-ecs/update-service:
-          cluster-name: webserver-001-<< parameters.lowercase_environment >>-cluster
-          service-name: webserver-001-<< parameters.lowercase_environment >>-service
-          family: webserver-001-<< parameters.lowercase_environment >>-task-definition
+      - aws-ecs/deploy-service-update:
+          family: webserver-001-<< parameters.lowercase_environment >>-service
+          cluster: webserver-001-<< parameters.lowercase_environment >>-cluster
+          container-image-name-updates: 'container=webserver-001-<< parameters.lowercase_environment >>-service,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:${CIRCLE_SHA1}'
           force-new-deployment: true
+      # - aws-ecs/update-service:
+      #     cluster-name: webserver-001-<< parameters.lowercase_environment >>-cluster
+      #     service-name: webserver-001-<< parameters.lowercase_environment >>-service
+      #     family: webserver-001-<< parameters.lowercase_environment >>-task-definition
+      #     force-new-deployment: true
 
 workflows:
   version: 2
