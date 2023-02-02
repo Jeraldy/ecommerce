@@ -91,7 +91,7 @@ jobs:
           dockerfile: Dockerfile
           tag: 'circleci-$CIRCLE_SHA1,<< parameters.lowercase_environment >>,latest'
           path: backend/
-          repo: 'ecommerce-<< parameters.lowercase_environment >>-repo'
+          repo: 'ecommerce-002-<< parameters.lowercase_environment >>-repo'
   
   deploy-backend:
     parameters:
@@ -128,23 +128,23 @@ workflows:
             branches:
               only:
                 - develop
-      - deploy-backend:
-          name: 'deploy-backend-dev'
-          lowercase_environment: 'dev'
-          uppercase_environment: 'DEV'
-          requires:
-            - build-backend-dev
-          filters:
-            branches:
-              only:
-                - develop
-      - build-and-deploy-frontend:
-          name: 'build-and-deploy-frontend-dev'
-          uppercase_environment: 'DEV'
-          frontend_bucket: 'jeddy-ecommerce-frontend'
-          requires:
-            - deploy-backend-dev
-          filters:
-            branches:
-              only:
-                - develop
+      # - deploy-backend:
+      #     name: 'deploy-backend-dev'
+      #     lowercase_environment: 'dev'
+      #     uppercase_environment: 'DEV'
+      #     requires:
+      #       - build-backend-dev
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      # - build-and-deploy-frontend:
+      #     name: 'build-and-deploy-frontend-dev'
+      #     uppercase_environment: 'DEV'
+      #     frontend_bucket: 'jeddy-ecommerce-frontend'
+      #     requires:
+      #       - deploy-backend-dev
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
