@@ -110,7 +110,7 @@ jobs:
           cluster: webserver-01-<< parameters.lowercase_environment >>-cluster
           service-name: webserver-01-<< parameters.lowercase_environment >>-service
           family: webserver-01-<< parameters.lowercase_environment >>-task-definition
-          container-image-name-updates: 'container=ecommerce-container,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:circleci-${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=ecommerce-container,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:latest'
           force-new-deployment: true
 
 workflows:
@@ -128,23 +128,23 @@ workflows:
             branches:
               only:
                 - develop
-      # - deploy-backend:
-      #     name: 'deploy-backend-dev'
-      #     lowercase_environment: 'dev'
-      #     uppercase_environment: 'DEV'
-      #     requires:
-      #       - build-backend-dev
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      # - build-and-deploy-frontend:
-      #     name: 'build-and-deploy-frontend-dev'
-      #     uppercase_environment: 'DEV'
-      #     frontend_bucket: 'jeddy-ecommerce-frontend'
-      #     requires:
-      #       - deploy-backend-dev
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
+      - deploy-backend:
+          name: 'deploy-backend-dev'
+          lowercase_environment: 'dev'
+          uppercase_environment: 'DEV'
+          requires:
+            - build-backend-dev
+          filters:
+            branches:
+              only:
+                - develop
+      - build-and-deploy-frontend:
+          name: 'build-and-deploy-frontend-dev'
+          uppercase_environment: 'DEV'
+          frontend_bucket: 'jeddy-ecommerce-frontend'
+          requires:
+            - deploy-backend-dev
+          filters:
+            branches:
+              only:
+                - develop
