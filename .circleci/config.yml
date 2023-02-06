@@ -91,7 +91,7 @@ jobs:
           dockerfile: Dockerfile
           tag: 'circleci-$CIRCLE_SHA1,<< parameters.lowercase_environment >>,latest'
           path: backend/
-          repo: 'ecommerce-01-<< parameters.lowercase_environment >>-repo'
+          repo: 'ecommerce-002-<< parameters.lowercase_environment >>-repo'
   
   deploy-backend:
     parameters:
