@@ -9,7 +9,7 @@ app.use(express.json());
 app.use('/api/v1/user', userRouter);
 
 app.all('*', (req, res, next) => {
-    const message = `Can't find ${req.originalUrl} on this server!`;
+    const message = `Can't find ${req.originalUrl} on this server.`;s
     next(new AppError(message, 404));
 });
 
