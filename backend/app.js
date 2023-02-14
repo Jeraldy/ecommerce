@@ -16,7 +16,7 @@ app.use('/health', (req, res, next) => {
 });
 
 app.all('*', (req, res, next) => {
-    const message = `Can't find ${req.originalUrl} on this server!`;
+    const message = `Can't find ${req.originalUrl} on this server 1. !`;
     next(new AppError(message, 404));
 });
 
