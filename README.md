@@ -1,4 +1,5 @@
-[Ecommerce](http://nunua.s3-website-us-east-1.amazonaws.com/) &middot; ![GitHub branch checks state](https://img.shields.io/github/checks-status/jeraldy/ecommerce/develop)
+[Ecommerce](http://nunua.s3-website-us-east-1.amazonaws.com/)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/jeraldy/ecommerce/develop)
 
  Project description goes here
 
