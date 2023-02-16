@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        New feature - 03
+        WELCOME TO NUNUA ONLINE SHOP
       </header>
     </div>
   );
