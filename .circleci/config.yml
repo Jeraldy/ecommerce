@@ -141,7 +141,7 @@ workflows:
       - build-and-deploy-frontend:
           name: 'build-and-deploy-frontend-dev'
           uppercase_environment: 'DEV'
-          frontend_bucket: 'jeddy-ecommerce-frontend'
+          frontend_bucket: 'nunua'
           requires:
             - deploy-backend-dev
           filters:
