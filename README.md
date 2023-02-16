@@ -1,7 +1,6 @@
-[Ecommerce](http://nunua.s3-website-us-east-1.amazonaws.com/)
-![GitHub branch checks state](https://img.shields.io/github/checks-status/jeraldy/ecommerce/develop)
+# [Ecommerce](http://nunua.s3-website-us-east-1.amazonaws.com/) &middot; ![GitHub branch checks state](https://img.shields.io/github/checks-status/jeraldy/ecommerce/develop) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Jeraldy/JeddyJs/blob/master/CONTRIBUTING.md)
 
- Project description goes here
+ Project description goes her
 
 ## Getting Started
 
