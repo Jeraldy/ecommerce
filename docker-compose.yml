@@ -11,11 +11,10 @@ services:
   backend-dev:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     command: [ "bash", "-c", "yarn start" ]
     environment:
-      - PORT=8080
-      - DATABASE=mongodb://mongodb-dev:27017/ecommerce
+      - DATABASE_DEV=mongodb://mongodb-dev:27017/ecommerce
     ports:
       - "8080:8080"
     depends_on:
