@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const app = require('./app')
 
 const port = process.env.PORT || 8080;
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'dev';
 
 let dbConnection = process.env.DATABASE_DEV;
 if(env === 'prod'){
