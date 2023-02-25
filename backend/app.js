@@ -1,12 +1,12 @@
 const express = require('express');
-const userRouter = require('./routers/user.routes');
+// const userRouter = require('./routers/user.routes');
 const AppError = require('./utils/app.error');
 const globalErrorHandler = require('./controllers/error.controller');
 
 const app = express();
 
 app.use(express.json());
-app.use('/api/v1/user', userRouter);
+// app.use('/api/v1/user', userRouter);
 
 app.use('/health', (req, res, next) => {
     res.status(200).json({
