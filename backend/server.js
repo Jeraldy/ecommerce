@@ -5,9 +5,9 @@ const port = process.env.PORT || 8080;
 const env = process.env.NODE_ENV || 'dev';
 
 let dbConnection = process.env.DATABASE_DEV;
-if(env === 'prod'){
+if (env === 'prod') {
     dbConnection = process.env.DATABASE_PROD;
-}else if(env === 'test'){
+} else if (env === 'test') {
     dbConnection = process.env.DATABASE_TEST;
 }
 
@@ -18,6 +18,6 @@ mongoose.connect(dbConnection, { useNewUrlParser: true })
     })
     .catch(err => console.log(err));
 
-app.listen(port, () => {
-    console.log(`App is running on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`App is running on port x ${port}`);
 });
