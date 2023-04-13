@@ -10,7 +10,7 @@ if (env === 'prod') {
 } else if (env === 'test') {
     dbConnection = process.env.DATABASE_TEST;
 }
-
+console.log({ dbConnection })
 mongoose.connect(dbConnection, { useNewUrlParser: true })
     .then(_ => {
         console.log("Db connection was successfuly")
@@ -19,5 +19,5 @@ mongoose.connect(dbConnection, { useNewUrlParser: true })
     .catch(err => console.log(err));
 
 app.listen(port, '0.0.0.0', () => {
-    console.log(`App is running on port x ${port}`);
+    console.log(`App is running on port ${port}`);
 });
