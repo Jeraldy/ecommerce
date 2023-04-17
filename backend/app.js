@@ -5,6 +5,8 @@ const xss = require('xss-clean');
 const helmet = require('helmet');
 // const hpp = require('hpp')
 const userRouter = require('./routers/user.routes');
+const productRouter = require('./routers/product.routes');
+
 const AppError = require('./utils/app.error');
 const globalErrorHandler = require('./controllers/error.controller');
 
@@ -30,6 +32,7 @@ app.use(xss());
 //app.use(hpp());
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/product', productRouter);
 
 app.use('/health', (req, res, next) => {
     res.status(200).json({
