@@ -108,7 +108,7 @@ jobs:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.uppercase_environment >>
       - aws-ecs/update-service:
           cluster: ecommerce-01-<< parameters.lowercase_environment >>-cluster
-          service-name: webserver-<< parameters.lowercase_environment >>-service
+          service-name: webserver-01-<< parameters.lowercase_environment >>-service
           family: webserver-<< parameters.lowercase_environment >>-task-definition
           container-image-name-updates: 'container=ecommerce-container,image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_<< parameters.uppercase_environment >>}.amazonaws.com/ecommerce-<< parameters.lowercase_environment >>-repo:latest'
           force-new-deployment: true
