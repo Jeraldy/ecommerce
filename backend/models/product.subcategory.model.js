@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const commonModel = require('./common.model');
+const ProductCategory = require('./product.category.model');
 
 const ProductSubCategorySchema = new mongoose.Schema({
     name: {
@@ -14,10 +15,16 @@ const ProductSubCategorySchema = new mongoose.Schema({
     categoryId: {
         type: mongoose.Schema.ObjectId,
         ref: 'ProductCategory',
-        required: [true, "Product Category is required!"]
+        required: [true, "Product category is required!"],
+        validate: {
+            validator: async function (val) {
+                return await ProductCategory.exists({ _id: val })
+            },
+            message: 'Product category does not exist!'
+        }
     },
     ...commonModel
-})
+});
 
 const ProductSubCategory = mongoose.model('ProductSubCategory', ProductSubCategorySchema)
 
