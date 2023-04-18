@@ -16,6 +16,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin'),
+        productController.validateProduct,
         productController.createProduct);
 
 router
@@ -24,6 +25,7 @@ router
     .patch(
         authController.protect,
         authController.restrictTo('admin'),
+        productController.validateProduct,
         productController.updateProduct)
     .delete(
         authController.protect,
