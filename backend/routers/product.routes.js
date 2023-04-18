@@ -5,10 +5,13 @@ const productController = require('./../controllers/product.controller');
 const productCategoryRouter = require('./product.category.routes');
 const productSubCategoryRouter = require('./product.subcategory.routes');
 
+const productVariationRouter = require('./product.variation.routes');
+
 const router = express.Router();
 
 router.use('/category', productCategoryRouter);
 router.use('/subcategory', productSubCategoryRouter);
+router.use('/variation', productVariationRouter);
 
 router
     .route('/')
