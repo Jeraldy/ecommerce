@@ -22,5 +22,5 @@ const ProductVariationOptionSchema = new mongoose.Schema({
     ...commonModel
 })
 
-const ProductVariationOption = mongoose.model('ProductVariationOption',ProductVariationOptionSchema);
+const ProductVariationOption = mongoose.model('ProductVariationOption', ProductVariationOptionSchema);
 module.exports = ProductVariationOption
