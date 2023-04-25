@@ -2,7 +2,7 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/app.error');
 const APIFeatures = require('./../utils/api.features');
 
-exports.deleteOne = Model =>
+const deleteOne = Model =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
 
@@ -13,7 +13,7 @@ exports.deleteOne = Model =>
     res.status(204).json({ status: 'success', data: null });
   });
 
-exports.updateOne = Model =>
+const updateOne = Model =>
   catchAsync(async (req, res, next) => {
     const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -27,7 +27,7 @@ exports.updateOne = Model =>
     res.status(200).json({ status: 'success', data });
   });
 
-exports.createOne = Model =>
+const createOne = Model =>
   catchAsync(async (req, res, next) => {
     if (req.user) {
       req.body.createdBy = req.user._id
@@ -36,7 +36,7 @@ exports.createOne = Model =>
     res.status(201).json({ status: 'success', data });
   });
 
-exports.getOne = (Model, popOptions) =>
+const getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
@@ -49,7 +49,7 @@ exports.getOne = (Model, popOptions) =>
     res.status(200).json({ status: 'success', data });
   });
 
-exports.getAll = Model =>
+const getAll = Model =>
   catchAsync(async (req, res, next) => {
     // To allow for nested GET reviews on tour (hack)
     let filter = {};
@@ -65,3 +65,20 @@ exports.getAll = Model =>
 
     res.status(200).json({ status: 'success', results: data.length, data });
   });
+
+const CRUD = Model => ({
+  create: createOne(Model),
+  update: updateOne(Model),
+  delete: deleteOne(Model),
+  getAll: getAll(Model),
+  getOne: getOne(Model)
+});
+
+module.exports = {
+  createOne,
+  updateOne,
+  deleteOne,
+  getAll,
+  getOne,
+  CRUD
+};

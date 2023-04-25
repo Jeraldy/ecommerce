@@ -1,27 +1,7 @@
 const express = require('express');
-const authController = require('./../controllers/auth.controller');
-const productCategoryController = require('./../controllers/product.category.controller');
+const controller = require('./../controllers/product.category.controller');
+const crudRouter = require('../utils/crud.router');
 
 const router = express.Router();
 
-router
-    .route('/')
-    .get(productCategoryController.getAllProductCategory)
-    .post(
-        authController.protect,
-        authController.restrictTo('admin'),
-        productCategoryController.createProductCategory);
-
-router
-    .route('/:id')
-    .get(productCategoryController.getProductCategory)
-    .patch(
-        authController.protect,
-        authController.restrictTo('admin'),
-        productCategoryController.updateProductCategory)
-    .delete(
-        authController.protect,
-        authController.restrictTo('admin'),
-        productCategoryController.deleteProductCategory);
-
-module.exports = router;
+module.exports = crudRouter(router, controller.CRUD);
