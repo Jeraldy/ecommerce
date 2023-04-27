@@ -1,12 +1,8 @@
-import './App.css';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        WELCOME TO NUNUA ONLINE SHOP
-      </header>
-    </div>
+    <AdminDashboard />
   );
 }
 
