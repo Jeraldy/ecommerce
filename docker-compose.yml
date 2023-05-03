@@ -11,10 +11,14 @@ services:
   backend-dev:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: [ "bash", "-c", "yarn start" ]
     environment:
       - DATABASE_DEV=mongodb://mongodb-dev:27017/ecommerce
+      - NODE_ENV=dev
+      - JWT_SECRET=DaoxGNGbKX9fPhKg3G9LStWEsAG2C6
+      - JWT_EXPIRES_IN=90d
+      - JWT_COOKIE_EXPIRES_IN=90
     ports:
       - "8080:8080"
     depends_on:
