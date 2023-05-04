@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const helmet = require('helmet');
+const cors = require('cors')
 // const hpp = require('hpp')
 const userRouter = require('./routers/user.routes');
 const productRouter = require('./routers/product.routes');
@@ -30,6 +31,12 @@ app.use(mongoSanitize());
 app.use(xss());
 // Prevent parameter pollution
 //app.use(hpp());
+
+// 1) GLOBAL MIDDLEWARES
+// Implement CORS
+app.use(cors());
+// Access-Control-Allow-Origin *
+app.options('*', cors());
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/product', productRouter);

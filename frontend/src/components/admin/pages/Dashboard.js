@@ -5,7 +5,7 @@ function Dashboard (){
   return(
     <>
     <Card>
-    <h1>Dashboard</h1>
+        <h1>Dashboard</h1>
     </Card>
     </>
   )
