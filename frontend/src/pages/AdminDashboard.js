@@ -1,6 +1,7 @@
-import { FileOutlined, PieChartOutlined, UserOutlined ,DesktopOutlined,TeamOutlined} from '@ant-design/icons';
+import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { GetUsers, Login } from '../api/User';
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -29,12 +30,21 @@ const AdminDashboard = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  useEffect(() => {
+    async function loginUser() {
+      const user = await Login('deus.jeraldy@gmail.com', '@User123');
+      console.log(user)
+      if(user.token){
+        const users = await GetUsers(user.token)
+        console.log(users)
+      }   
+    }
+    //loginUser();
+  }, []);
+
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
+    <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div
           style={{
