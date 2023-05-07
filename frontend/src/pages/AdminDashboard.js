@@ -40,7 +40,7 @@ const AdminDashboard = () => {
         console.log(users)
       }   
     }
-    loginUser();
+    //loginUser();
   }, []);
 
   return (
