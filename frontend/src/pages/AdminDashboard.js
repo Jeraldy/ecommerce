@@ -32,14 +32,14 @@ const AdminDashboard = () => {
   } = theme.useToken();
 
   useEffect(() => {
-    async function loginUser() {
-      const user = await Login('deus.jeraldy@gmail.com', '@User123');
-      console.log(user)
-      if(user.token){
-        const users = await GetUsers(user.token)
-        console.log(users)
-      }   
-    }
+    // async function loginUser() {
+    //   const user = await Login('deus.jeraldy@gmail.com', '@User123');
+    //   console.log(user)
+    //   if(user.token){
+    //     const users = await GetUsers(user.token)
+    //     console.log(users)
+    //   }   
+    // }
     //loginUser();
   }, []);
 
