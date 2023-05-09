@@ -1,7 +1,7 @@
 import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import { GetUsers, Login } from '../api/User';
+// import { GetUsers, Login } from '../api/User';
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
