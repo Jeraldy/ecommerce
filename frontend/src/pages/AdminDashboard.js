@@ -1,7 +1,7 @@
 import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import { GetUsers, Login } from '../api/User';
+// import { GetUsers, Login } from '../api/User';
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -32,14 +32,14 @@ const AdminDashboard = () => {
   } = theme.useToken();
 
   useEffect(() => {
-    async function loginUser() {
-      const user = await Login('deus.jeraldy@gmail.com', '@User123');
-      console.log(user)
-      if(user.token){
-        const users = await GetUsers(user.token)
-        console.log(users)
-      }   
-    }
+    // async function loginUser() {
+    //   const user = await Login('deus.jeraldy@gmail.com', '@User123');
+    //   console.log(user)
+    //   if(user.token){
+    //     const users = await GetUsers(user.token)
+    //     console.log(users)
+    //   }   
+    // }
     //loginUser();
   }, []);
 
